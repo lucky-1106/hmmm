@@ -1,32 +1,37 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div class="app">
+    <!-- <h2>我是app.vue</h2> -->
+    <router-view></router-view>
+    <!-- <img src="@/assets/imgs/login_bg.png" alt=""> -->
   </div>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+export default {
+  mounted () {},
+  data () {
+    return {}
+  },
+  methods: {}
 }
+</script>
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+<style lang="less" scoped>
+// 在style中使用@需要在前面添加~
+// @import url('~@/assets/css/index.css');
+.app {
+  width: 100%;
+  height: 100%;
+}
+</style>
+<style lang="less">
+* {
+  margin: 0;
+  padding: 0;
+}
+body,
+html {
+  width: 100%;
+  height: 100%;
 }
 </style>
