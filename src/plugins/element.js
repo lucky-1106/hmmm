@@ -8,6 +8,7 @@ import {
   Radio,
   RadioGroup,
   Checkbox,
+  CheckboxGroup,
   Select,
   Option,
   Button,
@@ -37,6 +38,7 @@ Vue.use(Input)
 Vue.use(Radio)
 Vue.use(RadioGroup)
 Vue.use(Checkbox)
+Vue.use(CheckboxGroup)
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(Button)
