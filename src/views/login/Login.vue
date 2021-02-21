@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <!-- 登录框 -->
     <div class="loginbox">
       <div class="loginbox_title">
         <img src="@/assets/imgs/layout_icon.png" alt="" />
@@ -13,6 +14,7 @@
         ref="loginRefForm"
         class="demo-ruleForm"
       >
+        <!-- 手机号 -->
         <el-form-item prop="phone">
           <el-input
             v-model="loginForm.phone"
@@ -20,6 +22,7 @@
             prefix-icon="el-icon-user"
           ></el-input>
         </el-form-item>
+        <!-- 密码 -->
         <el-form-item prop="password">
           <el-input
             show-password
@@ -28,8 +31,9 @@
             prefix-icon="el-icon-lock"
           ></el-input>
         </el-form-item>
-        <el-row>
-          <el-col :span="18">
+        <!-- 验证码 -->
+        <el-row :gutter="10">
+          <el-col :span="16">
             <el-form-item prop="code">
               <el-input
                 v-model="loginForm.code"
@@ -38,16 +42,16 @@
               ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="6"
+          <el-col :span="8"
             ><img
               @click="updateCaptcha"
               :src="captchaUrl"
               alt=""
               class="captcha"
-              width="100%"
               height="40px"
           /></el-col>
         </el-row>
+        <!-- 同意协议 -->
         <el-form-item prop="checked">
           <el-checkbox-group v-model="loginForm.checked">
             <el-checkbox name="checked"
@@ -65,28 +69,34 @@
             >
           </el-checkbox-group>
         </el-form-item>
-        <el-button
+        <el-form-item><el-button
           type="primary"
           class="loginbtn"
           @click="login('loginRefForm')"
           >登录</el-button
-        >
-        <el-form-item> </el-form-item>
+        ></el-form-item>
         <el-form-item>
-          <el-button type="success" class="loginbtn">注册</el-button>
+          <el-button type="success" class="loginbtn" @click="registerShow = true">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
+    <!-- 登录右侧背景 -->
     <div class="loginimg">
       <a href="javascript:;"><img src="@/assets/imgs/login_bg.png" alt=""/></a>
     </div>
+    <!-- 注册页面 -->
+    <register v-show="registerShow"></register>
   </div>
 </template>
 
 <script>
 import { setToken } from '@/utils/token'
+import register from './Register'
 export default {
   mounted () {},
+  components: {
+    register
+  },
   data () {
     // 验证手机的规则
     var checkPhone = (rule, value, callback) => {
@@ -138,7 +148,9 @@ export default {
             trigger: 'change'
           }
         ]
-      }
+      },
+      // 注册页的显示情况
+      registerShow: false
     }
   },
   methods: {
@@ -228,6 +240,7 @@ export default {
   width: 100%;
   height: 40px;
   border: 1px dotted #ccc;
+  border-radius: 3px;
 }
 .el-link {
   vertical-align: baseline;
