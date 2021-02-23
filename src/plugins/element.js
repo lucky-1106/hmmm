@@ -14,6 +14,7 @@ import {
   Button,
   Table,
   TableColumn,
+  Tag,
   DatePicker,
   Form,
   FormItem,
@@ -24,6 +25,8 @@ import {
   Container,
   Header,
   Aside,
+  Avatar,
+  Progress,
   Main,
   Link,
   MessageBox,
@@ -34,7 +37,9 @@ Vue.use(Pagination)
 Vue.use(Dialog)
 Vue.use(Menu)
 Vue.use(MenuItem)
+Vue.use(Progress)
 Vue.use(Input)
+Vue.use(Tag)
 Vue.use(Radio)
 Vue.use(RadioGroup)
 Vue.use(Checkbox)
@@ -54,6 +59,7 @@ Vue.use(Card)
 Vue.use(Container)
 Vue.use(Header)
 Vue.use(Aside)
+Vue.use(Avatar)
 Vue.use(Main)
 Vue.use(Link)
 

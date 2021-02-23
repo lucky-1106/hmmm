@@ -76,7 +76,7 @@
           >登录</el-button
         ></el-form-item>
         <el-form-item>
-          <el-button type="success" class="loginbtn" @click="registerShow = true">注册</el-button>
+          <el-button type="success" class="loginbtn" @click="showRegister">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -127,8 +127,8 @@ export default {
       captchaUrl: `${process.env.VUE_APP_BASE_URL}/captcha?type=login`,
       // 表单绑定数据
       loginForm: {
-        phone: '15083532135',
-        password: '111111',
+        phone: '18888888888',
+        password: '123456',
         code: '',
         checked: []
       },
@@ -158,8 +158,8 @@ export default {
     updateCaptcha () {
       const time = +new Date()
       // console.log(time)
-      this.captchaUrl =
-        `${process.env.VUE_APP_BASE_URL}/captcha?type=login` + '&t=' + time
+      this.captchaUrl = `${process.env.VUE_APP_BASE_URL}/captcha?type=login` + '&t=' + time
+      this.$refs.loginRefForm.clearValidate(['code'])
     },
     // 登录
     login (formName) {
@@ -179,6 +179,10 @@ export default {
           return false
         }
       })
+    },
+    // 显示注册页
+    showRegister () {
+      this.registerShow = true
     }
   }
 }

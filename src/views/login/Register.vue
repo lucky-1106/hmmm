@@ -98,7 +98,9 @@
               ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8"><el-button @click="getRcode">获取用户验证码</el-button></el-col>
+          <el-col :span="8"
+            ><el-button @click="getRcode">获取用户验证码</el-button></el-col
+          >
         </el-row>
         <el-form-item style="text-align: center">
           <el-button type="info" @click="resetForm">重置</el-button>
@@ -110,6 +112,7 @@
 </template>
 
 <script>
+import { getUserCode, registerUser } from '@/api/api'
 export default {
   mounted () {},
   data () {
@@ -172,18 +175,26 @@ export default {
       },
       // 表单验证规则
       rules: {
-        avatar: [
-          { required: true, message: '请上传头像', trigger: 'change' }
-        ],
+        avatar: [{ required: true, message: '请上传头像', trigger: 'change' }],
         username: [
           { required: true, message: '请输入昵称', trigger: 'blur' },
-          { min: 3, max: 10, message: '昵称长度在 3 到 10 个字符', trigger: 'blur' }
+          {
+            min: 3,
+            max: 10,
+            message: '昵称长度在 3 到 10 个字符',
+            trigger: 'blur'
+          }
         ],
         email: [{ validator: checkEmail, trigger: 'blur' }],
         phone: [{ validator: checkPhone, trigger: 'blur' }],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 16, message: '密码长度在 6 到 16 个字符', trigger: 'blur' }
+          {
+            min: 6,
+            max: 16,
+            message: '密码长度在 6 到 16 个字符',
+            trigger: 'blur'
+          }
         ],
         code: [{ validator: checkCaptcha, trigger: 'blur' }],
         rcode: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
@@ -203,6 +214,7 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw)
       if (res.code === 200) {
         this.registerForm.avatar = res.data.file_path
+        this.$refs.registerRefForm.validateField(['avatar'])
       }
     },
     // 图片上传之前回调函数
@@ -221,38 +233,57 @@ export default {
       return isJPG && isLt2M
     },
     // 获取用户验证码
-    async getRcode () {
+    getRcode () {
       let count = 0
-      this.$refs.registerRefForm.validateField(['phone', 'code'], errorMessage => {
-        if (!errorMessage) {
+      this.$refs.registerRefForm.validateField(['phone', 'code'], err => {
+        if (!err) {
           count++
         }
       })
       // console.log(count)
       if (count === 2) {
-        const { data: res } = await this.$axios.post('/sendsms', {
+        // 封装的获取用户验证码接口
+        getUserCode({
           phone: this.registerForm.phone,
           code: this.registerForm.code
+        }).then(res => {
+          // console.log(res.data)
+          if (res.data.code !== 200) {
+            this.updateCaptcha()
+            return this.$message.error(res.data.message)
+          }
+          this.registerForm.rcode = res.data.data.captcha
         })
+        // const { data: res } = await this.$axios.post('/sendsms', {
+        //   phone: this.registerForm.phone,
+        //   code: this.registerForm.code
+        // })
         // console.log(res)
-        if (res.code !== 200) {
-          return this.$message.error(res.message)
-        }
-        this.registerForm.rcode = res.data.captcha
       } else {
         return this.$message.error('请输入正确的手机号和图片码')
       }
     },
     // 注册用户
     register () {
-      this.$refs.registerRefForm.validate(async valid => {
+      this.$refs.registerRefForm.validate(valid => {
         if (valid) {
-          const { data: res } = await this.$axios.post('/register', this.registerForm)
-          // console.log(res)
-          if (res.code !== 200) {
-            return this.$message.error(res.msg)
-          }
-          this.$message.success('注册成功哦,' + this.registerForm.username)
+          // const { data: res } = await this.$axios.post(
+          //   '/register',
+          //   this.registerForm
+          // )
+          // // console.log(res)
+          // if (res.code !== 200) {
+          //   return this.$message.error(res.msg)
+          // }
+          // this.$message.success('注册成功哦,' + this.registerForm.username)
+          // 封装用户注册接口
+          registerUser(this.registerForm).then(res => {
+            // console.log(res.data)
+            if (res.data.code !== 200) {
+              return this.$message.error(res.data.msg)
+            }
+            this.$message.success('注册成功哦,' + this.registerForm.username)
+          })
           this.close()
         } else {
           this.$message.warning('请输入正确的提交数据')
@@ -269,6 +300,7 @@ export default {
     resetForm () {
       this.imageUrl = ''
       this.$refs.registerRefForm.resetFields()
+      this.updateCaptcha()
     }
   }
 }
@@ -282,6 +314,7 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
+  min-width: 1400px;
   height: 100%;
   background: rgba(0, 0, 0, 0.3);
   z-index: 999;
