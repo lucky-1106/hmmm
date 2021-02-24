@@ -7,7 +7,13 @@ export function getUserCode ({ phone, code }) {
     code: code
   })
 }
+
 // 封装注册用户接口
 export function registerUser (obj) {
   return axios.post('/register', obj)
+}
+// 封装用户登录接口
+
+export function loginUser (obj) {
+  return axios.post('/login', obj)
 }

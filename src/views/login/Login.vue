@@ -69,14 +69,18 @@
             >
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item><el-button
-          type="primary"
-          class="loginbtn"
-          @click="login('loginRefForm')"
-          >登录</el-button
-        ></el-form-item>
+        <el-form-item
+          ><el-button
+            type="primary"
+            class="loginbtn"
+            @click="login('loginRefForm')"
+            >登录</el-button
+          ></el-form-item
+        >
         <el-form-item>
-          <el-button type="success" class="loginbtn" @click="showRegister">注册</el-button>
+          <el-button type="success" class="loginbtn" @click="showRegister"
+            >注册</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -90,10 +94,16 @@
 </template>
 
 <script>
-import { setToken } from '@/utils/token'
+import { setToken, getToken } from '@/utils/token'
 import register from './Register'
+import { loginUser } from '@/api/api'
 export default {
-  mounted () {},
+  created () {
+    if (getToken()) {
+      this.$message.info('tip: 已经登录,自动跳转到首页')
+      this.$router.push('/main')
+    }
+  },
   components: {
     register
   },
@@ -158,7 +168,8 @@ export default {
     updateCaptcha () {
       const time = +new Date()
       // console.log(time)
-      this.captchaUrl = `${process.env.VUE_APP_BASE_URL}/captcha?type=login` + '&t=' + time
+      this.captchaUrl =
+        `${process.env.VUE_APP_BASE_URL}/captcha?type=login` + '&t=' + time
       this.$refs.loginRefForm.clearValidate(['code'])
     },
     // 登录
@@ -166,14 +177,25 @@ export default {
       // console.log(this.$axios)
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          const { data: res } = await this.$axios.post('/login', this.loginForm)
-          // console.log(res)
-          if (res.code !== 200) {
-            return this.$message.error(res.msg)
-          }
-          this.$message.success('登录成功')
-          setToken(res.data.token)
-          this.$router.push('/main')
+          // const { data: res } = await this.$axios.post('/login', this.loginForm)
+          // // console.log(res)
+          // if (res.code !== 200) {
+          //   return this.$message.error(res.msg)
+          // }
+          // this.$message.success('登录成功')
+          // setToken(res.data.token)
+          // this.$router.push('/main')
+          // 封装登录请求
+          loginUser(this.loginForm).then(res => {
+            // console.log(res)
+            if (res.code !== 200) {
+              this.updateCaptcha()
+              return this.$message.error(res.message)
+            }
+            this.$message.success('登录成功')
+            setToken(res.data.token)
+            this.$router.push('/main')
+          })
         } else {
           this.$message.warning('请输入正确的提交数据')
           return false

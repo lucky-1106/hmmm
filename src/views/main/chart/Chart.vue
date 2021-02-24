@@ -102,7 +102,7 @@ export default {
   },
   methods: {
     async getChartData () {
-      const { data: res } = await this.$axios.post('/data/title')
+      const res = await this.$axios.post('/data/title')
       // console.log(res)
       if (res.code !== 200) {
         return this.$message({

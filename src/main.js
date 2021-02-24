@@ -5,6 +5,9 @@ import store from './store'
 import '@/plugins/element'
 import './utils/request'
 
+// 解决冲突 Added non-passive event listener to a scroll-blocking 'mousewheel' event
+import 'default-passive-events'
+
 Vue.config.productionTip = false
 
 new Vue({

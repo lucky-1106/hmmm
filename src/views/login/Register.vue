@@ -248,11 +248,11 @@ export default {
           code: this.registerForm.code
         }).then(res => {
           // console.log(res.data)
-          if (res.data.code !== 200) {
+          if (res.code !== 200) {
             this.updateCaptcha()
-            return this.$message.error(res.data.message)
+            return this.$message.error(res.message)
           }
-          this.registerForm.rcode = res.data.data.captcha
+          this.registerForm.rcode = res.data.captcha
         })
         // const { data: res } = await this.$axios.post('/sendsms', {
         //   phone: this.registerForm.phone,
@@ -279,12 +279,12 @@ export default {
           // 封装用户注册接口
           registerUser(this.registerForm).then(res => {
             // console.log(res.data)
-            if (res.data.code !== 200) {
-              return this.$message.error(res.data.msg)
+            if (res.code !== 200) {
+              return this.$message.error(res.message)
             }
             this.$message.success('注册成功哦,' + this.registerForm.username)
+            this.close()
           })
-          this.close()
         } else {
           this.$message.warning('请输入正确的提交数据')
           return false

@@ -8,8 +8,8 @@
         <span>黑马面面</span>
       </div>
       <div class="infoandlogout">
-        <el-avatar :size="40" :src="userInfo.avatar"></el-avatar>
-        <i>{{ userInfo.username }}</i
+        <el-avatar :size="40" :src="$store.state.avatar"></el-avatar>
+        <i>{{ $store.state.username }}</i
         >,欢迎！
         <el-button class="logout" @click="logout" type="danger"
           >退出登录</el-button
@@ -20,7 +20,7 @@
       <!-- 侧边栏 -->
       <el-aside :width="asideWidth">
         <el-menu
-          default-active="/main/chart"
+          :default-active="isActivePath"
           class="el-menu-vertical-demo"
           :collapse="isFold"
           :collapse-transition="false"
@@ -60,26 +60,37 @@ import { removeToken } from '@/utils/token'
 export default {
   created () {
     this.getUserInfo()
+    this.isActivePath = window.location.hash.slice(1)
+    // console.log(this.$store.state)
+    // console.log(this.isActivePath)
   },
   data () {
     return {
-      userInfo: {},
+      // 当前路径
+      isActivePath: '',
+      // 用户信息
+      // userInfo: {},
+      // 折叠状态
       isFold: false,
+      // 折叠图标名
       foldIcon: 'el-icon-s-fold',
+      // 菜单栏的宽度
       asideWidth: '200px'
     }
   },
   methods: {
     // 获取登陆用户信息
     async getUserInfo () {
-      const { data: res } = await this.$axios.get('/info')
+      const res = await this.$axios.get('/info')
       // console.log(res)
       if (res.code !== 200) {
         return this.$message.error(res.message)
       }
-      this.userInfo = res.data
-      this.userInfo.avatar =
-        process.env.VUE_APP_BASE_URL + '/' + this.userInfo.avatar
+      // 设置初始用户状态
+      const avatarHead = process.env.VUE_APP_BASE_URL + '/' + res.data.avatar
+      this.$store.commit('setUserName', res.data.username)
+      this.$store.commit('setAvatar', avatarHead)
+      this.$store.commit('setUserId', res.data.id)
     },
     // 退出登录
     logout () {
@@ -106,8 +117,10 @@ export default {
         })
     },
     changeFold () {
-      !this.isFold ? this.foldIcon = 'el-icon-s-unfold' : this.foldIcon = 'el-icon-s-fold'
-      !this.isFold ? this.asideWidth = '63px' : this.asideWidth = '200px'
+      !this.isFold
+        ? (this.foldIcon = 'el-icon-s-unfold')
+        : (this.foldIcon = 'el-icon-s-fold')
+      !this.isFold ? (this.asideWidth = '63px') : (this.asideWidth = '200px')
       this.isFold = !this.isFold
     }
   }
@@ -121,7 +134,7 @@ export default {
 .el-header {
   display: flex;
   justify-content: space-between;
-  background-color: rgb(250,250,250);
+  background-color: rgb(250, 250, 250);
 }
 .el-aside {
   background-color: #fff;
@@ -149,7 +162,7 @@ export default {
   align-items: center;
   color: #333;
   i {
-        font-style: normal;
+    font-style: normal;
     margin: 0px 10px;
   }
   .logout {

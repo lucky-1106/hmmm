@@ -38,4 +38,12 @@ html {
 li {
   list-style: none;
 }
+.el-dialog__header {
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(225deg, #1493fa, #01c6fa);
+}
+.el-dialog__close {
+  color: red !important;
+}
 </style>
