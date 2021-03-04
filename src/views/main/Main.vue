@@ -18,7 +18,7 @@
     </el-header>
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside :width="asideWidth">
+      <el-aside width="auto">
         <el-menu
           :default-active="isActivePath"
           class="el-menu-vertical-demo"
@@ -73,9 +73,7 @@ export default {
       // 折叠状态
       isFold: false,
       // 折叠图标名
-      foldIcon: 'el-icon-s-fold',
-      // 菜单栏的宽度
-      asideWidth: '200px'
+      foldIcon: 'el-icon-s-fold'
     }
   },
   methods: {
@@ -100,7 +98,7 @@ export default {
         type: 'warning'
       })
         .then(async () => {
-          const { data: res } = await this.$axios.get('/logout')
+          const res = await this.$axios.get('/logout')
           // console.log(res)
           if (res.code !== 200) {
             return this.$message.error(res.message)
@@ -120,7 +118,6 @@ export default {
       !this.isFold
         ? (this.foldIcon = 'el-icon-s-unfold')
         : (this.foldIcon = 'el-icon-s-fold')
-      !this.isFold ? (this.asideWidth = '63px') : (this.asideWidth = '200px')
       this.isFold = !this.isFold
     }
   }
@@ -138,6 +135,9 @@ export default {
 }
 .el-aside {
   background-color: #fff;
+  .el-menu-item {
+    padding: 0 60px;
+  }
 }
 .el-main {
   background-color: rgb(240, 240, 240);

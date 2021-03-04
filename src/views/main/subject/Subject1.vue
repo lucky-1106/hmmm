@@ -1,33 +1,33 @@
 <template>
-  <div class="enterprise">
+  <div class="subject">
     <el-card>
-      <!-- 查询企业模块 -->
+      <!-- 查询学科模块 -->
       <el-form
         :inline="true"
-        :model="enterpriseFrom"
-        ref="enterpriseFrom"
+        :model="subjectFrom"
+        ref="subjectFrom"
         class="demo-form-inline"
       >
-        <el-form-item label="企业编号" prop="eid">
+        <el-form-item label="学科编号" prop="rid">
           <el-input
-            v-model="enterpriseFrom.eid"
-            placeholder="请输入企业编号"
+            v-model="subjectFrom.rid"
+            placeholder="请输入学科编号"
           ></el-input>
         </el-form-item>
-        <el-form-item label="企业名称" prop="name">
+        <el-form-item label="学科名称" prop="name">
           <el-input
-            v-model="enterpriseFrom.name"
-            placeholder="请输入企业名称"
+            v-model="subjectFrom.name"
+            placeholder="请输入学科名称"
           ></el-input>
         </el-form-item>
         <el-form-item label="创建者" prop="username">
           <el-input
-            v-model="enterpriseFrom.username"
+            v-model="subjectFrom.username"
             placeholder="请输入创建者"
           ></el-input>
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="enterpriseFrom.status" placeholder="选择企业状态">
+          <el-select v-model="subjectFrom.status" placeholder="选择学科状态">
             <el-option label="启用" value="1"></el-option>
             <el-option label="禁用" value="0"></el-option>
           </el-select>
@@ -40,35 +40,37 @@
         </el-form-item>
         <el-form-item>
           <el-button type="success" @click="dialogVisible = true"
-            >+添加企业</el-button
+            >+添加学科</el-button
           >
         </el-form-item>
       </el-form>
     </el-card>
     <el-card class="box-card">
-      <!-- 企业列表 -->
-      <el-table :data="enterpriseList" stripe style="width: 100%">
+      <!-- 学科列表 -->
+      <el-table :data="subjectList" stripe style="width: 100%">
         <el-table-column type="index" label="序号" width="70">
         </el-table-column>
-        <el-table-column prop="eid" label="企业编号" width="80">
+        <el-table-column prop="rid" label="学科编号" width="100">
         </el-table-column>
-        <el-table-column prop="name" label="企业名称" width="150">
+        <el-table-column prop="name" label="学科名称" width="150">
+        </el-table-column>
+        <el-table-column prop="short_name" label="简称" width="150">
         </el-table-column>
         <el-table-column prop="username" label="创建者" width="100">
         </el-table-column>
-        <el-table-column prop="create_time" label="创建日期">
+        <el-table-column prop="create_time" label="创建日期" width="200">
         </el-table-column>
-          <el-table-column label="状态" width="100">
-            <template v-slot="slotProps">
-              <el-tag
-                v-if="slotProps.row.status === 1"
-                type="success"
-                >启用</el-tag
-              >
-              <el-tag v-else type="danger">禁用</el-tag>
-            </template>
-          </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="状态">
+          <template v-slot="slotProps">
+            <el-tag
+              v-if="slotProps.row.status === 1"
+              type="success"
+              >启用</el-tag
+            >
+            <el-tag v-else type="danger">禁用</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="300">
           <template v-slot="slotProps">
             <el-button
               type="warning"
@@ -82,10 +84,10 @@
               @click="setStatus(slotProps.row.id)"
               >启用</el-button
             >
-            <el-button type="primary" @click="getEditEnterpriseInfo(slotProps.row)"
+            <el-button type="primary" @click="getEditSubjectInfo(slotProps.row)"
               >编辑</el-button
             >
-            <el-button type="danger" @click="onRemoveEnterprise(slotProps.row.id)"
+            <el-button type="danger" @click="onRemoveSubject(slotProps.row.id)"
               >删除</el-button
             >
           </template>
@@ -102,139 +104,131 @@
         :total="total"
       >
       </el-pagination>
-      <!-- 添加企业 -->
+      <!-- 添加学科 -->
       <el-dialog
         :visible.sync="dialogVisible"
         close-on-press-escape
         width="30%"
         @closed="resetForm"
       >
-        <span slot="title" class="dialog-title">新增企业</span>
-        <!-- 添加企业表单 -->
+        <span slot="title" class="dialog-title">新增学科</span>
+        <!-- 添加学科表单 -->
         <el-form
-          :model="addEnterpriseForm"
+          :model="addSubjectForm"
           :rules="rules"
-          ref="addEnterpriseForm"
+          ref="addSubjectForm"
           class="demo-ruleForm"
           label-width="80px"
         >
-          <!-- 企业编号 -->
-          <el-form-item prop="eid" label="企业编号">
+          <!-- 学科编号 -->
+          <el-form-item prop="rid" label="学科编号">
             <el-input
-              v-model="addEnterpriseForm.eid"
-              placeholder="请输入企业编号"
+              v-model="addSubjectForm.rid"
+              placeholder="请输入学科编号"
             ></el-input>
           </el-form-item>
-           <!-- 企业名称 -->
-          <el-form-item prop="name" label="企业名称">
+           <!-- 学科名称 -->
+          <el-form-item prop="name" label="学科名称">
             <el-input
-              v-model="addEnterpriseForm.name"
-              placeholder="请输入企业名称"
+              v-model="addSubjectForm.name"
+              placeholder="请输入学科名称"
             ></el-input>
           </el-form-item>
-           <!-- 企业简称 -->
-          <el-form-item prop="short_name" label="企业简称">
+           <!-- 学科简称 -->
+          <el-form-item prop="short_name" label="学科简称">
             <el-input
-              v-model="addEnterpriseForm.short_name"
-              placeholder="请输入企业简称"
+              v-model="addSubjectForm.short_name"
+              placeholder="请输入学科简称"
             ></el-input>
           </el-form-item>
-          <!-- 企业简介 -->
-          <el-form-item prop="intro" label="企业简介">
+          <!-- 学科简介 -->
+          <el-form-item prop="intro" label="学科简介">
             <el-input
-              v-model="addEnterpriseForm.intro"
-              placeholder="请输入企业简介"
+              v-model="addSubjectForm.intro"
+              placeholder="请输入学科简介"
             ></el-input>
           </el-form-item>
           <!-- 状态 -->
           <el-form-item label="状态" prop="status">
-            <el-select v-model="addEnterpriseForm.status" placeholder="选择企业状态">
+            <el-select v-model="addSubjectForm.status" placeholder="选择学科状态">
               <el-option label="禁用" :value="0"></el-option>
               <el-option label="启用" :value="1"></el-option>
             </el-select>
           </el-form-item>
-          <!-- 企业备注 -->
-          <el-form-item prop="remark" label="企业备注">
+          <!-- 学科备注 -->
+          <el-form-item prop="remark" label="学科备注">
             <el-input
-              v-model="addEnterpriseForm.remark"
-              placeholder="请输入企业备注"
+              v-model="addSubjectForm.remark"
+              placeholder="请输入学科备注"
             ></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button type="info" @click="resetForm">重 置</el-button>
-          <el-button type="primary" @click="onAddEnterprise">确 定</el-button>
+          <el-button type="primary" @click="onAddSubject">确 定</el-button>
         </span>
       </el-dialog>
-      <!-- 编辑企业 -->
+      <!-- 编辑学科 -->
       <el-dialog
         :visible.sync="editDlVisible"
         close-on-press-escape
         width="30%"
       >
-        <span slot="title" class="dialog-title">编辑企业</span>
+        <span slot="title" class="dialog-title">编辑学科</span>
         <!-- 编辑表单 -->
         <el-form
-          :model="editEnterpriseForm"
+          :model="editSubjectForm"
           :rules="rules"
-          ref="editEnterpriseForm"
+          ref="editSubjectForm"
           class="demo-ruleForm"
           label-width="80px"
         >
-          <!-- 企业编号 -->
-          <el-form-item prop="eid" label="企业编号">
+          <!-- 学科编号 -->
+          <el-form-item prop="rid" label="学科编号">
             <el-input
-              v-model="editEnterpriseForm.eid"
-              placeholder="请输入企业编号"
+              v-model="editSubjectForm.rid"
+              placeholder="请输入学科编号"
             ></el-input>
           </el-form-item>
-           <!-- 企业名称 -->
-          <el-form-item prop="name" label="企业名称">
+           <!-- 学科名称 -->
+          <el-form-item prop="name" label="学科名称">
             <el-input
-              v-model="editEnterpriseForm.name"
-              placeholder="请输入企业名称"
+              v-model="editSubjectForm.name"
+              placeholder="请输入学科名称"
             ></el-input>
           </el-form-item>
-           <!-- 企业简称 -->
-          <el-form-item prop="short_name" label="企业简称">
+           <!-- 学科简称 -->
+          <el-form-item prop="short_name" label="学科简称">
             <el-input
-              v-model="editEnterpriseForm.short_name"
-              placeholder="请输入企业简称"
+              v-model="editSubjectForm.short_name"
+              placeholder="请输入学科简称"
             ></el-input>
           </el-form-item>
-          <!-- 企业简介 -->
-          <el-form-item prop="intro" label="企业简介">
+          <!-- 学科简介 -->
+          <el-form-item prop="intro" label="学科简介">
             <el-input
-              v-model="editEnterpriseForm.intro"
-              placeholder="请输入企业简介"
+              v-model="editSubjectForm.intro"
+              placeholder="请输入学科简介"
             ></el-input>
-          </el-form-item>
-          <!-- 所属领域 -->
-          <el-form-item label="所属领域" prop="tag">
-            <el-select v-model="editEnterpriseForm.tag" placeholder="选择所属领域">
-              <el-option label="金融" value="金融"></el-option>
-              <el-option label="互联网" value="互联网"></el-option>
-              <el-option label="电商" value="电商"></el-option>
-            </el-select>
           </el-form-item>
           <!-- 状态 -->
           <el-form-item label="状态" prop="status">
-            <el-select v-model="editEnterpriseForm.status" placeholder="选择企业状态">
+            <el-select v-model="editSubjectForm.status" placeholder="选择学科状态">
               <el-option label="禁用" :value="0"></el-option>
               <el-option label="启用" :value="1"></el-option>
             </el-select>
           </el-form-item>
-          <!-- 企业备注 -->
-          <el-form-item prop="remark" label="企业备注">
+          <!-- 学科备注 -->
+          <el-form-item prop="remark" label="学科备注">
             <el-input
-              v-model="editEnterpriseForm.remark"
-              placeholder="请输入企业备注"
+              v-model="editSubjectForm.remark"
+              placeholder="请输入学科备注"
             ></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button type="info" @click="resetEditForm">重 置</el-button>
-          <el-button type="primary" @click="editEnterprise">确 定</el-button>
+          <el-button type="primary" @click="editSubject">确 定</el-button>
         </span>
       </el-dialog>
     </el-card>
@@ -244,82 +238,82 @@
 <script>
 export default {
   created () {
-    this.getEnterpriseList()
+    this.getSubjectList()
   },
   data () {
     return {
       // 顶部表单绑定数据
-      enterpriseFrom: {
+      subjectFrom: {
         name: '',
-        eid: '',
+        rid: '',
         username: '',
         status: ''
       },
-      // 企业列表
-      enterpriseList: [],
-      // 企业列表请求参数
+      // 学科列表
+      subjectList: [],
+      // 学科列表请求参数
       tableQuery: {
         page: 1,
         limit: 4
       },
-      // 企业总数
+      // 学科总数
       total: 0,
       // 对话框显示情况
       dialogVisible: false,
       editDlVisible: false,
-      // 添加企业表单绑定值
-      addEnterpriseForm: {
-        eid: 'LQ001',
-        name: '棋讯QQ',
-        short_name: '乐再沟通',
-        intro: '',
+      // 添加学科表单绑定值
+      addSubjectForm: {
+        rid: 'LQ001',
+        name: '勾引富婆的N种方法',
+        short_name: '再也不快乐',
+        intro: '快乐钢丝球，凶猛蜡烛油',
         status: '',
         remark: '赖棋是帅哥'
       },
-      editEnterpriseForm: {},
+      editSubjectForm: {},
       // 表单规则
       rules: {
-        eid: [
-          { required: true, message: '请输入企业编号', trigger: 'blur' }
+        rid: [
+          { required: true, message: '请输入学科编号', trigger: 'blur' }
         ],
         name: [
-          { required: true, message: '请输入企业名称', trigger: 'blur' }
+          { required: true, message: '请输入学科名称', trigger: 'blur' }
         ],
         status: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
     }
   },
   methods: {
-    // 获取企业列表
-    async getEnterpriseList () {
-      const res = await this.$axios.get('/enterprise/list', {
-        params: { ...this.enterpriseFrom, ...this.tableQuery }
+    // 获取学科列表
+    async getSubjectList () {
+      const res = await this.$axios.get('/subject/list', {
+        params: { ...this.subjectFrom, ...this.tableQuery }
       })
-      console.log(res)
+      // console.log(res)
       if (res.code !== 200) {
         return this.$message({
           message: res.message,
           type: 'error'
         })
       }
-      this.enterpriseList = res.data.items
+      this.subjectList = res.data.items
       this.total = res.data.pagination.total
     },
-    // 查询符合条件企业
+    // 查询符合条件学科
     onSubmit () {
-      this.getEnterpriseList()
+      this.getSubjectList()
     },
     // 重置表单
     onReset () {
-      this.$refs.enterpriseFrom.resetFields()
+      this.$refs.subjectFrom.resetFields()
       // console.log('重置')
-      this.getEnterpriseList()
+      this.getSubjectList()
     },
-    // 添加企业
-    onAddEnterprise () {
-      this.$refs.addEnterpriseForm.validate(async valid => {
+    // 添加学科
+    onAddSubject () {
+      this.$refs.addSubjectForm.validate(async valid => {
         if (valid) {
-          const res = await this.$axios.post('/enterprise/add', this.addEnterpriseForm)
+          const res = await this.$axios.post('/subject/add', this.addSubjectForm)
           // console.log(res)
           if (res.code !== 200) {
             return this.$message({
@@ -327,36 +321,36 @@ export default {
               type: 'error'
             })
           }
-          this.$message.success('添加企业成功')
+          this.$message.success('添加学科成功')
           this.dialogVisible = false
-          this.getEnterpriseList()
+          this.getSubjectList()
         } else {
           console.log('请填写正确的提交格式!!')
           return false
         }
       })
     },
-    // 重置添加企业form表单
+    // 重置添加学科form表单
     resetForm () {
-      this.$refs.addEnterpriseForm.resetFields()
+      this.$refs.addSubjectForm.resetFields()
     },
-    // 重置编辑企业form表单
+    // 重置编辑学科form表单
     resetEditForm () {
-      this.$refs.editEnterpriseForm.resetFields()
+      this.$refs.editSubjectForm.resetFields()
     },
     // 关闭对话框的回调函数
     // closeDialog () {
     //   this.resetForm()
     // },
     // 删除用户
-    onRemoveEnterprise (id) {
-      this.$confirm('确认要删除该企业', '确认信息', {
+    onRemoveSubject (id) {
+      this.$confirm('确认要删除该学科', '确认信息', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确认',
         cancelButtonText: '放弃'
       })
         .then(async () => {
-          const res = await this.$axios.post('/enterprise/remove', {
+          const res = await this.$axios.post('/subject/remove', {
             id: id
           })
           // console.log(res)
@@ -371,7 +365,7 @@ export default {
             type: 'success',
             message: '删除成功'
           })
-          this.getEnterpriseList()
+          this.getSubjectList()
         })
         .catch(() => {
           this.$message({
@@ -380,9 +374,9 @@ export default {
           })
         })
     },
-    // 修改企业状态
+    // 修改学科状态
     async setStatus (id) {
-      const res = await this.$axios.post('/enterprise/status', {
+      const res = await this.$axios.post('/subject/status', {
         id: id
       })
       // console.log(res)
@@ -395,31 +389,31 @@ export default {
       }
       this.$message({
         type: 'success',
-        message: '修改企业状态成功'
+        message: '修改学科状态成功'
       })
-      this.getEnterpriseList()
+      this.getSubjectList()
     },
     // 改变每条显示页数
     handleSizeChange (val) {
       this.tableQuery.limit = val
-      this.getEnterpriseList()
+      this.getSubjectList()
     },
     // 改变当前所在页数
     handleCurrentChange (val) {
       this.tableQuery.page = val
-      this.getEnterpriseList()
+      this.getSubjectList()
     },
-    // 获取编辑企业信息
-    async getEditEnterpriseInfo (row) {
-      this.editEnterpriseForm = JSON.parse(JSON.stringify(row))
+    // 获取编辑学科信息
+    async getEditSubjectInfo (row) {
+      this.editSubjectForm = JSON.parse(JSON.stringify(row))
       this.editDlVisible = true
-      // console.log(this.editEnterpriseForm)
+      // console.log(this.editSubjectForm)
     },
-    // 提交编辑的企业
-    editEnterprise () {
-      this.$refs.editEnterpriseForm.validate(async valid => {
+    // 提交编辑的学科
+    editSubject () {
+      this.$refs.editSubjectForm.validate(async valid => {
         if (valid) {
-          const res = await this.$axios.post('/enterprise/edit', this.editEnterpriseForm)
+          const res = await this.$axios.post('/subject/edit', this.editSubjectForm)
           // console.log(res)
           if (res.code !== 200) {
             return this.$message({
@@ -428,10 +422,10 @@ export default {
               type: 'error'
             })
           }
-          this.$message.success('编辑企业成功')
+          this.$message.success('编辑学科成功')
           this.editDlVisible = false
-          this.editEnterpriseForm = {}
-          this.getEnterpriseList()
+          this.editSubjectForm = {}
+          this.getSubjectList()
         } else {
           console.log('请填写正确的提交格式!!')
           return false

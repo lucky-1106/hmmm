@@ -30,7 +30,8 @@ import {
   Main,
   Link,
   MessageBox,
-  Message
+  Message,
+  Cascader
 } from 'element-ui'
 
 Vue.use(Pagination)
@@ -62,6 +63,7 @@ Vue.use(Aside)
 Vue.use(Avatar)
 Vue.use(Main)
 Vue.use(Link)
+Vue.use(Cascader)
 
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message

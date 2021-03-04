@@ -29,7 +29,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">查询</el-button>
+          <el-button type="primary" @click="onSubmit">搜索</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="info" @click="onReset">重置</el-button>
@@ -54,14 +54,10 @@
         </el-table-column>
         <el-table-column label="角色">
           <template v-slot="slotProps">
-            <el-tag v-if="slotProps.row.role_id === 2">管理员</el-tag>
-            <el-tag type="success" v-else-if="slotProps.row.role_id === 3"
-              >老师</el-tag
-            >
-            <el-tag type="success" v-else-if="slotProps.row.role_id === 1"
-              >超级管理员</el-tag
-            >
-            <el-tag type="success" v-else>学生</el-tag>
+            <el-tag v-if="slotProps.row.role_id === 1" effect="dark">超级管理员</el-tag>
+            <el-tag type="success" v-else-if="slotProps.row.role_id === 2" effect="dark">管理员</el-tag>
+            <el-tag type="warning" v-else-if="slotProps.row.role_id === 3" effect="dark">老师</el-tag>
+            <el-tag type="danger" v-else effect="dark">学生</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="remark" label="备注">
@@ -77,10 +73,9 @@
             <el-tag
               v-if="slotProps.row.status === 1"
               type="success"
-              effect="dark"
               >启用</el-tag
             >
-            <el-tag v-else type="danger" effect="dark">禁用</el-tag>
+            <el-tag v-else type="danger">禁用</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300">
@@ -121,7 +116,7 @@
       <el-dialog
         :visible.sync="dialogVisible"
         close-on-press-escape
-        width="30%"
+        width="40%"
         @closed="resetForm"
       >
         <span slot="title" class="dialog-title">新增用户</span>
@@ -190,7 +185,7 @@
       <el-dialog
         :visible.sync="editDlVisible"
         close-on-press-escape
-        width="30%"
+        width="50%"
       >
         <span slot="title" class="dialog-title">编辑用户</span>
         <!-- 编辑表单 -->
@@ -504,7 +499,7 @@ export default {
     },
     // 获取编辑用户信息
     async getEditUserInfo (row) {
-      this.editUserForm = row
+      this.editUserForm = JSON.parse(JSON.stringify(row))
       this.editDlVisible = true
       this.imageUrl =
         process.env.VUE_APP_BASE_URL + '/' + this.editUserForm.avatar
@@ -570,6 +565,37 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.user {
+  .avatar-uploader .el-upload {
+    width: 100px;
+    height: 100px;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409eff;
+  }
+  .avatar-uploader-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #8c939d;
+    text-align: center;
+  }
+  .el-icon-plus:before {
+    line-height: 100px;
+  }
+  .avatar {
+    width: 100px;
+    height: 100px;
+    display: block;
+  }
+}
 .box-card {
   margin-top: 20px;
 }

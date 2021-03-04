@@ -21,7 +21,7 @@
         class="demo-ruleForm"
       >
         <!-- 头像 -->
-        <el-form-item prop="avatar" label="头像">
+        <el-form-item class="avatar_r" prop="avatar" label="头像">
           <el-upload
             class="avatar-uploader"
             :action="action"
@@ -338,39 +338,41 @@ export default {
   border-radius: 3px;
 }
 </style>
-<style>
+<style lang="less">
 .box-card .el-card__header {
   height: 50px;
   padding: 0;
   background: linear-gradient(225deg, #1493fa, #01c6fa);
 }
-.avatar-uploader .el-upload {
-  width: 100px;
-  height: 100px;
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  color: #8c939d;
-  text-align: center;
-}
-.el-icon-plus:before {
-  line-height: 100px;
-}
-.avatar {
-  width: 100px;
-  height: 100px;
-  display: block;
+.avatar_r {
+  .avatar-uploader .el-upload {
+    width: 100px;
+    height: 100px;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409eff;
+  }
+  .avatar-uploader-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #8c939d;
+    text-align: center;
+  }
+  .el-icon-plus:before {
+    line-height: 100px;
+  }
+  .avatar {
+    width: 100px;
+    height: 100px;
+    display: block;
+  }
 }
 </style>

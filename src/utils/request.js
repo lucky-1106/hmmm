@@ -28,6 +28,7 @@ axios.interceptors.response.use(
     if (response.data.code === 206) {
       // 提示
       // Vue.prototype.$message.error('token过期')
+      // console.log(response.data.code)
       Message.error('token过期了！请重新登录')
       // 清空token
       removeToken()
